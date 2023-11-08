@@ -1,0 +1,45 @@
+# application/Cargo.toml
+
+[package]
+name = "application"
+version = "0.1.0"
+edition = "2021"
+
+resolver = "2"
+
+[dependencies]
+domain = { path = "../domain" }
+infrastructure = { path = "../infrastructure" }
+shared = { path = "../shared" }
+
+diesel = { version = "2.1.0", features = ["chrono", "postgres", "postgres_backend", "numeric", "r2d2", "uuid"]}
+
+serde = { version = "1.0.156", features = ["derive"] }
+serde_json = "1.0.94"
+serde_path_to_error = "0.1.10"
+serde_with = "2.3.1"
+
+chrono = { version = "0.4.24", features = ["serde"] }
+bigdecimal = { version = "0.3.0", features = ["serde"] }
+
+prost = "0.7"
+prost-types = "0.7"
+
+validator = "0.16.0"
+validator_derive = "0.16.0"
+reqwest = { version = "0.11.13", features = ["blocking", "socks", "rustls-tls"]}
+hex = "0.4"
+base64 = "0.13"
+anyhow = "1.0"
+dotenv = "0.15"
+
+#cln-rpc = "0.1.6"
+#tonic = {version="0.2.0",features = ["tls"]}
+#futures-util = { version = "0.3", features = [ "sink" ] }
+#tokio = { version = "1", features = ["full"]}
+#tokio-util = { version = "0.7", features = ["codec"] }
+
+#[dev-dependencies]
+#env_logger = "0.10"
+#tokio = { version = "1", features = ["net", "macros", "rt-multi-thread"]}
+
