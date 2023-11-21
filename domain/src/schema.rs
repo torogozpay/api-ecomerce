@@ -62,15 +62,9 @@ diesel::table! {
         bolt11 -> Nullable<Varchar>,
         payment_hash -> Nullable<Varchar>,
         payment_secret -> Nullable<Varchar>,
-        expires_at -> Numeric,
-        created_index -> Numeric,
-        warning_capacity -> Nullable<Varchar>,
-        warning_offline -> Nullable<Varchar>,
-        warning_deadends -> Nullable<Varchar>,
-        warning_private_unused -> Nullable<Varchar>,
-        warning_mpp -> Nullable<Varchar>,
         #[max_length = 250]
         description -> Varchar,
+        label -> Nullable<Varchar>,
         amount -> Numeric,
         payment_address -> Nullable<Varchar>,
         #[max_length = 25]

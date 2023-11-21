@@ -25,3 +25,10 @@ serial-key = "1.0"
 
 anyhow = "1.0"
 reqwest = { version = "0.11.13", features = ["blocking", "socks", "rustls-tls"]}
+
+tokio = { version = "0.2", features = ["macros", "rt-threaded"] }
+config = "0.10"
+lazy_static = "1.4"
+
+dotenv = "0.15"
+base64 = "0.13"

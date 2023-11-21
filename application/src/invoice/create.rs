@@ -1,93 +1,86 @@
 // apllication/src/invoice/create.rs
 
+use lazy_static::lazy_static;
+
 use domain::models::{BusinessNode, Invoice, MyNewInvoice, MyInvoice, InvoiceDet, NewInvoice, NewInvoiceDet};
+use domain::modelsext::{InvoiceExt, InvoiceCreated, InvoiceResult};
 use infrastructure as db;
 use diesel::prelude::*;
 use shared::error_handler::CustomError;
 //use anyhow::anyhow;
-use reqwest::{header, header::HeaderMap,Client,Response};
-//use cln_rpc::model::responses::InvoiceResponse;
-use super::config_node;
-use bigdecimal::BigDecimal;
-use dotenv::dotenv;
-use std::env;
+use reqwest::{header, Client};
+use bigdecimal::{BigDecimal, ToPrimitive};
 
-//use prost::Message; // for deserializing gRPC messages
-//use serde_json::to_string_pretty; // for serializing to JSON
+use shared::settings;
 
-
-pub async fn start_payment(mut myinvoice : MyNewInvoice) -> Result<MyInvoice, CustomError> {
-   let config = config_node(&myinvoice.api_secret).await?;
-   let _invoice_node: Response = generate_invoice(&config, &myinvoice.master.amount, &myinvoice.master.description).await?;
-
-   myinvoice.master.business_id = config.business_id.clone();
-/* 
-    myinvoice.master.bolt11 = _invoice_node.bolt11;
-    myinvoice.master.payment_hash = _invoice_node.payment_hash.to_string();
-    //myinvoice.master.payment_secret = _invoice_node.payment_secret;
-    myinvoice.master.expires_at = _invoice_node.expires_at.into();
-    myinvoice.master.warning_capacity = _invoice_node.warning_capacity;
-    myinvoice.master.warning_offline = _invoice_node.warning_offline;
-    myinvoice.master.warning_deadends = _invoice_node.warning_deadends;
-    myinvoice.master.warning_private_unused = _invoice_node.warning_private_unused;
-    myinvoice.master.warning_mpp = _invoice_node.warning_mpp;
-    myinvoice.master.payment_status = "Created".to_owned();
-*/
-    let invoice_api = create_invoice(myinvoice).await?;
-
-    Ok(invoice_api)
+lazy_static! {
+    static ref CONFIG: settings::Settings =
+        settings::Settings::new().expect("Config can be loaded");
 }
 
 
-pub async fn generate_invoice(config : &BusinessNode, amount : &BigDecimal, description : &String) -> Result<Response, CustomError> {
-    let client = Client::builder().build()?; 
+pub async fn start_payment(_config: BusinessNode, myinvoice : InvoiceCreated) -> Result<InvoiceResult, CustomError> {
+   let _invoice_node = generate_invoice(&_config, &myinvoice.amount, &myinvoice.description).await?;
 
-    // Load environment variables from the .env file
-    dotenv().ok();
-
-   // Encode your username and password as a Base64 string
-   let username = env::var("USERNAME").expect("USERNAME not found in .env file");
-   let password = env::var("PASSWORD").expect("PASSWORD not found in .env file");
-   let auth_string = format!("{}:{}", username, password);
-   let encoded_auth = base64::encode(&auth_string);
-   // Retrieve the API key from the environment variable
-    let api_key = env::var("API_KEY").expect("API_KEY not found in .env file");
-
-        
-    let query = vec![
-        //("path", config.path.to_string()),   
-        ("expiry", config.expiry.to_string()),   
-        ("cltv", config.cltv.to_string()),   
-        ("amount", amount.to_string()),    
-        ("description", description.to_string()),      
-    ];
+   Ok(_invoice_node.result)
+}
 
 
+pub async fn generate_invoice(config : &BusinessNode, amount : &BigDecimal, description : &String) -> Result<InvoiceExt, CustomError> {
+    let api_key = CONFIG.api.api_key.clone();
+    let username = CONFIG.api.api_username.clone();
+    let password = CONFIG.api.api_password.clone();
+    let auth_string = format!("{}:{}", username, password);
+    let auth_encoded = "Basic ".to_owned() + &base64::encode(&auth_string);
+   
+    let json = &serde_json::json!({
+        //"path": config.path.to_string(),
+        "expiry": config.expiry as u32,
+        "cltv": config.cltv as u32,
+        "description": description.to_string(),
+        "amount": amount.to_u64().unwrap()
+    });
+     
     // Construct the request
-    let response = client       
-            .get("https://64c7-138-186-251-29.ngrok-free.app/api/v1/createInvoice")
-            .header(header::AUTHORIZATION, format!("Basic {}", encoded_auth))
+    let client = Client::builder().build()?; 
+    let response = client
+            .post("https://6df3-138-186-251-29.ngrok-free.app/api/v1/createInvoice")
+            //.get("https://6df3-138-186-251-29.ngrok-free.app/api/v1/getInvoice")
+            //.get("https://6df3-138-186-251-29.ngrok-free.app/api/v1/getInfo")
+            .header("Authorization", format!("{}", auth_encoded))
             .header("x-api-key", api_key) 
-            //.header(header::AUTHORIZATION, format!("Bearer {}", token)) 
-            //.header(header::CONTENT_TYPE, "application/json") 
-            //.query(&query) 
-            .json(&serde_json::json!(query))
+            .header(header::CONTENT_TYPE, "application/json") 
+            .json(&json)
             .send()
             .await?;
 
-    // Parse and process the response
-    if response.status().is_success() {
-        // Serialize the gRPC response struct to JSON
-        //let json_response = to_string_pretty(&response).unwrap();
-        //println!("{:?}", json_response);
-        println!("{:?}", response);
-    } else {
-        println!("Request failed with status: {}", response.status());
-    }
+    // Check the response body
+    let body = response.text().await?;
+    println!("Response Body: {:?}", body);    
+    
+    // Deserialize JSON into struct
+    let result: Result<InvoiceExt, serde_json::Error> = serde_json::from_str(&body);
 
-    Ok(response)    
+    match result {
+        Ok(your_struct) => {
+            println!("Deserialized struct: {:?}", your_struct);
+            Ok(your_struct)    
+        }
+        Err(e) => {
+            println!("Error deserialized: {:?}", e);
+            Err(CustomError::new(997, e.to_string()))
+        }
+    }
+         
 }    
 
+pub async fn send_payment(_config: BusinessNode, mut myinvoice: MyNewInvoice) -> Result<MyInvoice, CustomError> {    
+    myinvoice.master.business_id = _config.business_id.clone();    
+    myinvoice.master.payment_status = Some("paid".to_owned());
+    let invoice = create_invoice(myinvoice).await?;
+
+    Ok(invoice)
+}
 
 pub async fn create_invoice(myinvoice: MyNewInvoice) -> Result<MyInvoice, CustomError> { 
     use domain::schema::invoices;
@@ -108,6 +101,6 @@ pub async fn create_invoice(myinvoice: MyNewInvoice) -> Result<MyInvoice, Custom
 
     let newinvoicedets = diesel::insert_into(invoices_det::table).values(&invoicedets).get_results::<InvoiceDet>(&mut conn)?;
 
-    let myresult = MyInvoice { api_secret: (myinvoice.api_secret), master: (newinvoice), details: (newinvoicedets) };
+    let myresult = MyInvoice { master: (newinvoice), details: (newinvoicedets) };
     Ok(myresult)
 }

@@ -1,19 +1,10 @@
 // application/src/invoice/update.rs
 
-use domain::models::{BusinessNode,Invoice, InvoiceDet, NewInvoiceDet, MyInvoice};
+use domain::models::{Invoice, InvoiceDet, NewInvoiceDet, MyInvoice};
 use infrastructure as db;
 use diesel::prelude::*;
 use shared::error_handler::CustomError;
-use super::config_node;
 
-pub async fn send_payment(mut myinvoice: MyInvoice,  payment_address: String) -> Result<MyInvoice, CustomError> {
-    let _config = config_node(&myinvoice.api_secret).await?;
-    myinvoice.master.payment_address = Some(payment_address);
-    myinvoice.master.payment_status = Some("Paid".to_owned());
-    let invoice = update_invoice(myinvoice).await?;
-
-    Ok(invoice)
-}
 
 pub async fn update_invoice(myinvoice: MyInvoice) -> Result<MyInvoice, CustomError> {
     use domain::schema::invoices::dsl::*;
@@ -76,7 +67,7 @@ pub async fn update_invoice(myinvoice: MyInvoice) -> Result<MyInvoice, CustomErr
  
 
     let invoicedets = InvoiceDet::belonging_to(&newinvoice).select(InvoiceDet::as_select()).load(&mut conn)?;
-    let myresult = MyInvoice { api_secret: (myinvoice.api_secret), master: (newinvoice), details: (invoicedets) };
+    let myresult = MyInvoice { master: (newinvoice), details: (invoicedets) };
 
     Ok(myresult)            
 }

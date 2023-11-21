@@ -84,16 +84,8 @@ pub struct NewInvoice {
    pub bolt11: Option<String>,
    pub payment_hash: Option<String>,
    pub payment_secret: Option<String>,
-   #[serde_as(as = "DisplayFromStr")]
-   pub expires_at: BigDecimal,
-   #[serde_as(as = "DisplayFromStr")]
-   pub created_index: BigDecimal,
-   pub warning_capacity: Option<String>,
-   pub warning_offline: Option<String>,
-   pub warning_deadends: Option<String>,
-   pub warning_private_unused: Option<String>,
-   pub warning_mpp: Option<String>,
    pub description: String,
+   pub label: Option<String>,
    #[serde_as(as = "DisplayFromStr")]
    pub amount: BigDecimal, 
    pub payment_address: Option<String>,
@@ -125,16 +117,8 @@ pub struct Invoice {
    pub bolt11: Option<String>,
    pub payment_hash: Option<String>,
    pub payment_secret: Option<String>,
-   #[serde_as(as = "DisplayFromStr")]
-   pub expires_at: BigDecimal,
-   #[serde_as(as = "DisplayFromStr")]
-   pub created_index: BigDecimal,
-   pub warning_capacity: Option<String>,
-   pub warning_offline: Option<String>,
-   pub warning_deadends: Option<String>,
-   pub warning_private_unused: Option<String>,
-   pub warning_mpp: Option<String>,
    pub description: String,
+   pub label: Option<String>,
    #[serde_as(as = "DisplayFromStr")]
    pub amount: BigDecimal, 
    pub payment_address: Option<String>,
@@ -223,48 +207,16 @@ pub struct BusinessNode {
    pub out: String  
 } 
 
-/*
-#[derive(Serialize, Default)]
-pub struct InvoiceResponse {
-	bolt11: String,
-	payment_hash: String,
-	payment_secret: String,
-	expires_at: u64,
-	created_index: u64,
-	warning_capacity: String,
-	warning_offline: String,
-	warning_deadends: String,
-	warning_private_unused: String,
-	warning_mpp: String,
-}
-
-#[derive(Serialize, Default)]
-pub struct ListInvoices {
-    invoices: Invoices
-}
-
-#[derive(Serialize, Default)]
-pub struct Invoices {
-    label: String,
-    description: String,
-	payment_hash: String,
-	expires_at: u64,
-	amount_msat: u64,
-	bolt11: String,
-}
- */
 
 #[derive(Queryable, Serialize, Deserialize, ToSchema)] 
 pub struct MyInvoice {
-    pub api_secret: String,
     pub master: Invoice,
     pub details: Vec<InvoiceDet>
 }
 
 impl MyInvoice {
-    pub fn new(api_secret: String, master: Invoice, details: Vec<InvoiceDet>) -> MyInvoice {
+    pub fn new(master: Invoice, details: Vec<InvoiceDet>) -> MyInvoice {
         MyInvoice {
-            api_secret: api_secret,
             master: master,
             details: details
         }
@@ -273,15 +225,13 @@ impl MyInvoice {
 
 #[derive(Queryable, Serialize, Deserialize, ToSchema)] 
 pub struct MyNewInvoice {
-    pub api_secret: String,
     pub master: NewInvoice,
     pub details: Vec<NewInvoiceDet>
 }
 
 impl MyNewInvoice {
-    pub fn new(api_secret: String, master: NewInvoice, details: Vec<NewInvoiceDet>) -> MyNewInvoice {
+    pub fn new(master: NewInvoice, details: Vec<NewInvoiceDet>) -> MyNewInvoice {
         MyNewInvoice {
-            api_secret: api_secret,
             master: master,
             details: details
         }
