@@ -84,16 +84,8 @@ pub struct NewInvoice {
    pub bolt11: Option<String>,
    pub payment_hash: Option<String>,
    pub payment_secret: Option<String>,
-   #[serde_as(as = "DisplayFromStr")]
-   pub expires_at: BigDecimal,
-   #[serde_as(as = "DisplayFromStr")]
-   pub created_index: BigDecimal,
-   pub warning_capacity: Option<String>,
-   pub warning_offline: Option<String>,
-   pub warning_deadends: Option<String>,
-   pub warning_private_unused: Option<String>,
-   pub warning_mpp: Option<String>,
    pub description: String,
+   pub label: Option<String>,
    #[serde_as(as = "DisplayFromStr")]
    pub amount: BigDecimal, 
    pub payment_address: Option<String>,
@@ -125,16 +117,8 @@ pub struct Invoice {
    pub bolt11: Option<String>,
    pub payment_hash: Option<String>,
    pub payment_secret: Option<String>,
-   #[serde_as(as = "DisplayFromStr")]
-   pub expires_at: BigDecimal,
-   #[serde_as(as = "DisplayFromStr")]
-   pub created_index: BigDecimal,
-   pub warning_capacity: Option<String>,
-   pub warning_offline: Option<String>,
-   pub warning_deadends: Option<String>,
-   pub warning_private_unused: Option<String>,
-   pub warning_mpp: Option<String>,
    pub description: String,
+   pub label: Option<String>,
    #[serde_as(as = "DisplayFromStr")]
    pub amount: BigDecimal, 
    pub payment_address: Option<String>,
@@ -189,10 +173,13 @@ pub struct InvoiceDet {
 #[diesel(table_name = businesses_nodes)]
 pub struct NewBusinessNode {
    pub business_id: i32,
-   pub node_id: i32,
-   pub path: String,
+   pub node_id: String,
+   pub lnd: bool,
    pub host: String,
    pub port: i32,
+   pub macaroon: String,
+   pub cert: String,
+   pub path: String,
    pub expiry: i32,
    pub cltv: i32,
    pub max_paths: i32,
@@ -210,10 +197,13 @@ pub struct NewBusinessNode {
 pub struct BusinessNode {
    pub id: i32,
    pub business_id: i32,
-   pub node_id: i32,
-   pub path: String,
+   pub node_id: String,
+   pub lnd: bool,
    pub host: String,
    pub port: i32,
+   pub macaroon: String,
+   pub cert: String,
+   pub path: String,
    pub expiry: i32,
    pub cltv: i32,
    pub max_paths: i32,
@@ -223,48 +213,16 @@ pub struct BusinessNode {
    pub out: String  
 } 
 
-/*
-#[derive(Serialize, Default)]
-pub struct InvoiceResponse {
-	bolt11: String,
-	payment_hash: String,
-	payment_secret: String,
-	expires_at: u64,
-	created_index: u64,
-	warning_capacity: String,
-	warning_offline: String,
-	warning_deadends: String,
-	warning_private_unused: String,
-	warning_mpp: String,
-}
-
-#[derive(Serialize, Default)]
-pub struct ListInvoices {
-    invoices: Invoices
-}
-
-#[derive(Serialize, Default)]
-pub struct Invoices {
-    label: String,
-    description: String,
-	payment_hash: String,
-	expires_at: u64,
-	amount_msat: u64,
-	bolt11: String,
-}
- */
 
 #[derive(Queryable, Serialize, Deserialize, ToSchema)] 
 pub struct MyInvoice {
-    pub api_secret: String,
     pub master: Invoice,
     pub details: Vec<InvoiceDet>
 }
 
 impl MyInvoice {
-    pub fn new(api_secret: String, master: Invoice, details: Vec<InvoiceDet>) -> MyInvoice {
+    pub fn new(master: Invoice, details: Vec<InvoiceDet>) -> MyInvoice {
         MyInvoice {
-            api_secret: api_secret,
             master: master,
             details: details
         }
@@ -273,15 +231,13 @@ impl MyInvoice {
 
 #[derive(Queryable, Serialize, Deserialize, ToSchema)] 
 pub struct MyNewInvoice {
-    pub api_secret: String,
     pub master: NewInvoice,
     pub details: Vec<NewInvoiceDet>
 }
 
 impl MyNewInvoice {
-    pub fn new(api_secret: String, master: NewInvoice, details: Vec<NewInvoiceDet>) -> MyNewInvoice {
+    pub fn new(master: NewInvoice, details: Vec<NewInvoiceDet>) -> MyNewInvoice {
         MyNewInvoice {
-            api_secret: api_secret,
             master: master,
             details: details
         }
@@ -322,15 +278,18 @@ impl NewInvoiceDet {
 }
 
 impl NewBusinessNode {
-    pub fn new(business_id: i32, node_id: i32, path: String, host: String, port: i32, 
-               expiry: i32, cltv: i32, max_paths: i32, pathfinding_timeout: i32,
-               max_fee: BigDecimal, out: String) -> NewBusinessNode{
+    pub fn new(business_id: i32, node_id: String, lnd: bool, path: String, host: String, port: i32, 
+               macaroon: String, cert: String, expiry: i32, cltv: i32, max_paths: i32, 
+               pathfinding_timeout: i32, max_fee: BigDecimal, out: String) -> NewBusinessNode{
         return NewBusinessNode {
             business_id: business_id,
             node_id: node_id,
-            path: path,
+            lnd: lnd,
             host: host,
             port: port,
+            macaroon: macaroon,
+            cert: cert,
+            path: path,
             expiry: expiry,
             cltv: cltv,
             max_paths: max_paths,

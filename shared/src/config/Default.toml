@@ -1,0 +1,12 @@
+[server]
+database_url = "postgres://postgres:admin@localhost:5433/test?sslmode=disable"
+host = "127.0.0.1"
+port = "8000"
+
+[log]
+level = "info"
+
+[api]
+api_key = "3ABC-9099-825A-7113-0E33"
+api_username = "TorogozPay"
+api_password = "CheritoCafe741"

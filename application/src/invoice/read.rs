@@ -1,14 +1,20 @@
 // application/src/invoice/read.rs
 
+use lazy_static::lazy_static;
+
 use domain::models::{BusinessNode,Invoice, InvoiceDet, MyInvoice};
+use domain::modelsext::InvoiceResponse;
 use infrastructure as db;
 use diesel::prelude::*;
 use shared::error_handler::CustomError;
-//use anyhow::anyhow;
+use reqwest::{header, Client};
 
-//use prost::Message; // for deserializing gRPC messages
-//use serde_json::to_string_pretty; // for serializing to JSON
-use reqwest::{header, Response};  
+use shared::settings;
+
+lazy_static! {
+    static ref CONFIG: settings::Settings =
+        settings::Settings::new().expect("Config can be loaded");
+}
 
 
 pub async fn list_invoice_by_id(model_id: i32) -> Result<MyInvoice, CustomError> {
@@ -18,51 +24,70 @@ pub async fn list_invoice_by_id(model_id: i32) -> Result<MyInvoice, CustomError>
 
     let invoice = invoices::table.filter(invoices::id.eq(model_id)).select(Invoice::as_select()).get_result(&mut conn)?;
     let invoicedets = InvoiceDet::belonging_to(&invoice).select(InvoiceDet::as_select()).load(&mut conn)?;
-    let myresult = MyInvoice { api_secret: ("".to_owned()), master: (invoice), details: (invoicedets) };
+    let myresult = MyInvoice { master: (invoice), details: (invoicedets) };
 
     Ok(myresult)
 }
 
 
-pub fn list_invoices() -> Result<Vec<Invoice>, CustomError> {
+pub async fn list_invoices(_config : &BusinessNode) -> Result<Vec<Invoice>, CustomError> {
     use domain::schema::invoices;
 
     let mut conn = db::connection()?;
 
-    let mut invoices = invoices::table.select(invoices::all_columns).load::<Invoice>(&mut conn)?;
+    let mut invoices = invoices::table.filter(invoices::business_id.eq(_config.business_id)).select(Invoice::as_select()).load(&mut conn)?;
     invoices.sort();
 
     Ok(invoices)
 }
 
 
-pub async fn list_invoice_by_hash(config : BusinessNode, payment_hash : String) -> Result<Response, anyhow::Error> {
-    let client = reqwest::Client::builder()
-                .build()?;
+pub async fn list_invoice_by_hash(config : &BusinessNode, payment_hash : String) -> Result<InvoiceResponse, CustomError> {
+    let api_key = CONFIG.api.api_key.clone();
+    let username = CONFIG.api.api_username.clone();
+    let password = CONFIG.api.api_password.clone();
+    let auth_string = format!("{}:{}", username, password);
+    let auth_encoded = "Basic ".to_owned() + &base64::encode(&auth_string);
 
-    let query = vec![
-        ("path", config.path),   
-        ("payment_hash", payment_hash) //hex::decode(payment_hash).expect("Failed to decode payment hash"))     
-    ];
+    let socket: String;
+    socket = config.host.to_string() + ":" + &config.port.to_string();
+
+    let json = &serde_json::json!({
+        "lnd": config.lnd,
+        "socket": socket.to_string(),
+        "macaroon": config.macaroon.to_string(),
+        "cert": config.cert.to_string(),
+        "path": config.path.to_string(),
+        "hash": payment_hash.to_string()
+    });
 
     // Construct the request
-    let response = client       
-            .get("http://localhost:9898/get_invoice")
-            //.header(header::AUTHORIZATION, format!("Bearer {}", token)) 
+    let client = Client::builder().build()?; 
+    let response = client
+            .get("https://a085-138-186-251-29.ngrok-free.app/api/v1/getInvoice")
+            .header("Authorization", format!("{}", auth_encoded))
+            .header("x-api-key", api_key) 
             .header(header::CONTENT_TYPE, "application/json") 
-            .header(header::ACCEPT, "application/grpc")       
-            .query(&query) 
+            .json(&json)
             .send()
             .await?;
 
-    // Parse and process the response
-    if response.status().is_success() {
-        // Serialize the gRPC response struct to JSON
-        //let json_response = to_string_pretty(&response).unwrap();
-        //println!("{:?}", json_response);
-    } else {
-        println!("Request failed with status: {}", response.status());
-    } 
+    // Check the response body
+    let body = response.text().await?;
+    println!("Response Body: {:?}", body);    
+    
+    // Deserialize JSON into struct
+    let result: Result<InvoiceResponse, serde_json::Error> = serde_json::from_str(&body);
 
-    Ok(response)    
+    match result {
+        Ok(your_struct) => {
+            println!("Deserialized struct: {:?}", your_struct);
+            Ok(your_struct)    
+        }
+        Err(e) => {
+            println!("Error deserialized: {:?}", e);
+            Err(CustomError::new(997, e.to_string()))
+        }
+    }
+
 }    

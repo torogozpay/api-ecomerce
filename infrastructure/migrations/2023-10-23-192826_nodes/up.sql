@@ -2,10 +2,13 @@
 CREATE TABLE businesses_nodes (
  id serial primary key,
  business_id integer not null,
- node_id int not null,
- path text not null,
+ node_id text not null,
+ lnd boolean not null default false,
  host text not null,
  port int not null,
+ macaroon text not null,
+ cert text not null,
+ path text not null,
  expiry int not null, --duración de invoice
  cltv int not null, --hold invoice cltv delta (expiration time in blocks)
  max_paths int not null, -- maxima cantidad de saltos que queremos que el nodo de para intentar efectuar el pago
