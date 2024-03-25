@@ -1,5 +1,5 @@
 [server]
-database_url = "postgres://postgres:admin@localhost:5433/test?sslmode=disable"
+database_url = "postgres://user:pasword@localhost:5432/dbtest?sslmode=disable"
 host = "127.0.0.1"
 port = "8282"
 
@@ -7,10 +7,10 @@ port = "8282"
 level = "info"
 
 [api]
-api_key = "3ABC-9099-825A-7113-0E33"
-api_username = "TorogozPay"
-api_password = "CheritoCafe741"
-api_server= "207.244.235.5"
+api_key = "0000-0000-0000-0000-0000"
+api_username = "MyUser"
+api_password = "MyPassword"
+api_server= "127.0.0.1"
 
 [jwt]
 jwt_secret= "MySecretPassword123"
