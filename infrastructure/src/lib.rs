@@ -1,4 +1,4 @@
-use shared::{error_handler::CustomError, settings};
+use shared::{error_handler::CustomError, settings::CONFIG};
 use diesel::pg::PgConnection;
 use diesel::r2d2::ConnectionManager;
 use lazy_static::lazy_static;
@@ -7,9 +7,6 @@ type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
 pub type DbConnection = r2d2::PooledConnection<ConnectionManager<PgConnection>>;
 
 lazy_static! {
-    static ref CONFIG: settings::Settings =
-        settings::Settings::new().expect("Config can be loaded");
-
     static ref POOL: Pool = {
         let db_url = CONFIG.server.database_url.clone();
         let manager = ConnectionManager::<PgConnection>::new(db_url);

@@ -1,7 +1,7 @@
 [server]
 database_url = "postgres://postgres:admin@localhost:5433/test?sslmode=disable"
 host = "127.0.0.1"
-port = "8000"
+port = "8282"
 
 [log]
 level = "info"
@@ -10,3 +10,8 @@ level = "info"
 api_key = "3ABC-9099-825A-7113-0E33"
 api_username = "TorogozPay"
 api_password = "CheritoCafe741"
+api_server= "207.244.235.5"
+
+[jwt]
+jwt_secret= "MySecretPassword123"
+jwt_secs= 3600 

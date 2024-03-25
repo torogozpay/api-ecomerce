@@ -1,3 +1,4 @@
+use lazy_static::lazy_static;
 use config::{Config, ConfigError, File};
 use serde::Deserialize;
 use std::fmt;
@@ -18,7 +19,14 @@ pub struct Log {
 pub struct Api {
     pub api_key: String,
     pub api_username: String,
-    pub api_password: String
+    pub api_password: String,
+    pub api_server: String
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct Jwt {
+    pub jwt_secret: String,
+    pub jwt_secs: usize
 }
 
 #[derive(Debug, Deserialize, Clone)]
@@ -26,6 +34,7 @@ pub struct Settings {
     pub server: Server,
     pub log: Log,
     pub api: Api,
+    pub jwt: Jwt,
     pub env: ENV,
 }
 
@@ -70,4 +79,8 @@ impl From<&str> for ENV {
             _ => ENV::Development,
         }
     }
+}
+
+lazy_static! {
+    pub static ref CONFIG : Settings = Settings::new().expect("Config can be loaded");
 }

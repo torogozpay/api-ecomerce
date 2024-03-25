@@ -3,3 +3,7 @@
 
 .env
 /infrastructure/.env
+
+/shared/src/config/Development.toml
+/shared/src/config/Production.toml
+/shared/src/config/Testing.toml

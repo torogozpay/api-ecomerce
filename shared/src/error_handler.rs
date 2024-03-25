@@ -2,13 +2,9 @@
 use actix_web::http::StatusCode;
 use actix_web::{HttpResponse, ResponseError};
 use diesel::result::Error as DieselError;
-use serde::Deserialize;
-use serde::Serialize;
+use serde::{Deserialize,Serialize};
 use serde_json::json;
 use std::fmt;
-//use anyhow::anyhow;
-//use reqwest::Error;
-
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CustomError {
@@ -53,6 +49,14 @@ impl From<anyhow::Error> for CustomError {
 
 impl From<reqwest::Error> for CustomError {
     fn from(error: reqwest::Error) -> CustomError {
+        match error {
+            err => CustomError::new(500, format!("Unknown error: {err}")),
+        }
+    }
+}
+
+impl From<jsonwebtoken::errors::Error> for CustomError {
+    fn from(error: jsonwebtoken::errors::Error) -> CustomError {
         match error {
             err => CustomError::new(500, format!("Unknown error: {err}")),
         }

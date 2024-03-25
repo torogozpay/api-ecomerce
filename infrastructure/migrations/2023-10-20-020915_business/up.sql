@@ -23,69 +23,21 @@ CREATE TABLE businesses (
  ask_address boolean not null  default false,
  created_at timestamp with time zone not null default now(),
  updated_at timestamp with time zone null,
- enabled boolean not null default true
+ enabled boolean not null default true,
+ apply_split boolean not null default true,
 );
-
-
-CREATE TABLE invoices (
- id serial primary key,
- business_id integer not null,
- bolt11 varchar null,
- payment_hash varchar null,
- payment_secret varchar null,
- description varchar(250) not null,
- label varchar null,
- amount numeric(18,2) not null default 0,
- payment_address varchar null,
- payment_status varchar(25) null,
- invoice_date timestamp with time zone not null,
- first_name varchar(50) not null,
- last_name varchar(50) not null,
- email varchar(60) not null,
- phone_number varchar(25) not null,
- address varchar(100) not null,
- city varchar(50) not null,
- id_country varchar(20) not null,
- id_region varchar(20) not null,
- postal_code varchar(20) not null,
- url_redirect varchar(100) not null,
- created_at timestamp with time zone not null default now(),
- updated_at timestamp with time zone null
-);
-
-
-CREATE TABLE invoices_det (
- id serial primary key,
- invoice_id integer not null,
- product_code varchar(30) not null,
- quantity numeric(18,2) not null default 0,
- amount numeric(18,2) not null default 0
-);
-
-
-alter table invoices
-   add constraint fk_invoices_businesses foreign key (business_id)
-      references businesses (id)
-      on delete restrict on update restrict;
-	  
-alter table invoices_det
-   add constraint fk_invoices_det_invoices foreign key (invoice_id)
-      references invoices (id)
-      on delete restrict on update restrict;	  
-
 
 create unique index idx_cn_businesses on businesses (
  api_id
 );
 
-create unique index idx_cn_invoices on invoices (
- business_id,
- payment_address,
- invoice_date,	
- amount	
+CREATE TABLE currencies (
+ id serial primary key,
+ currency varchar not null,
+ yadio varchar not null,
+ binance varchar not null
 );
 
-create unique index idx_cn_invoices_det on invoices_det (
- invoice_id,
- product_code	
-);
+
+INSERT INTO currencies(currency, yadio, binance)
+VALUES('USD','USD','BTCUSDT');
