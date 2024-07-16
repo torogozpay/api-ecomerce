@@ -16,11 +16,15 @@ pub struct Log {
 }
 
 #[derive(Debug, Deserialize, Clone)]
+pub struct OpenApi {
+    pub swagger: bool,
+}
+
+#[derive(Debug, Deserialize, Clone)]
 pub struct Api {
-    pub api_key: String,
-    pub api_username: String,
-    pub api_password: String,
-    pub api_server: String
+    pub api_server: String,
+    pub api_user: String,
+    pub api_pass: String
 }
 
 #[derive(Debug, Deserialize, Clone)]
@@ -36,6 +40,7 @@ pub struct Settings {
     pub api: Api,
     pub jwt: Jwt,
     pub env: ENV,
+    pub openapi: OpenApi
 }
 
 const CONFIG_FILE_PATH: &str = "./shared/src/config/Default.toml";

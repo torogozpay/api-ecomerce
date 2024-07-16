@@ -4,38 +4,38 @@ use serde::{Serialize, Deserialize};
 use std::time::SystemTime;
 use shared::{error_handler::CustomError,settings::CONFIG};
 use application::config_business;
-use domain::modelsext::Claims;
+use domain::modelsext::{Claims, RequestData};
+ 
+use crate::utils::response;
 
-
-
-// Definir una estructura para representar la respuesta del token
+// Define a structure to represent the token response
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TokenResponse {
     access_token: String,
     token_type: &'static str,
 }
 
-// Estructura para representar los datos de la solicitud
-#[derive(Debug, Serialize, Deserialize)]
-pub struct RequestData {
-    grant_type: Option<String>,
-    client_id: Option<String>,
-    client_secret: Option<String>,
-    audience: Option<String>,  // Nueva propiedad para la audiencia
-}
-
-// Estructura para representar la respuesta de error
+// Structure to represent the error response
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ErrorResponse {
     code: u32,
     message: String,
 }
 
-// Endpoint para generar el token
+#[utoipa::path(
+    post,
+    path = "/api/ecommerce/v1/generateAccessToken",
+    responses(
+        (status = 200, description = "Generate token", body = RequestData),
+        (status = 400, description = "Error", body = inline(response::ErrorResponse)),
+        (status = 404, description = "Business was not found", body = inline(response::ErrorResponse))
+    )
+)]
+// Endpoint to generate the token
 #[post("/generateAccessToken")]
 pub async fn generate_access_token_handler(data: web::Json<RequestData>) -> Result<HttpResponse, CustomError> {
 
-    // Verificar la presencia de grant_type, client_id y client_secret
+    // Check the presence of grant_type, client_id and client_secret
     if data.grant_type.is_none() || data.grant_type.as_ref().unwrap().trim().is_empty() {
         return Err(CustomError::new(10, "grant_type is required and must not be empty".to_string()));
     }
@@ -48,7 +48,7 @@ pub async fn generate_access_token_handler(data: web::Json<RequestData>) -> Resu
         return Err(CustomError::new(30, "client_secret is required and must not be empty".to_string()));
     }
 
-    // Verificar la presencia y no nulidad de la audiencia
+    // Verify the presence and non-annulment of the hearing
     if data.audience.is_none() || data.audience.as_ref().unwrap().trim().is_empty() {
         return Err(CustomError::new(40, "audience is required and must not be empty".to_string()));
     }
@@ -56,27 +56,27 @@ pub async fn generate_access_token_handler(data: web::Json<RequestData>) -> Resu
     match config_business(data.client_id.clone().expect("client_id"), data.client_secret.clone().expect("client_secret")).await {
         Ok(_config) => {      
         
-            // Obtener los valores de la solicitud
+            // Get request values
             let client_id = data.client_id.as_ref().unwrap();
             let client_secret = data.client_secret.as_ref().unwrap();
             let audience = data.audience.as_ref().unwrap();
         
-            // Verificar las credenciales del cliente
+            // Verify client credentials
             if client_id != &_config.api_id || client_secret != &_config.api_secret {
                 return Err(CustomError::new(50, "Invalid client credentials".to_string()));
             }
         
-            // Generar los claims del token
+            // Generate token claims
             let claims = Claims {
-                iss: _config.api_id.clone(), //"your_issuer".to_owned(),
-                sub: _config.id.to_string().clone(), //"your_subject".to_owned(),
-                aud: audience.clone(),  // Utilizar el valor de audiencia del cuerpo del JSON
+                iss: _config.api_id.clone(),
+                sub: _config.id.to_string().clone(), 
+                aud: audience.clone(),  // Use the audience value from the JSON body
                 exp: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() as usize + CONFIG.jwt.jwt_secs.clone(),
                 iat: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() as usize,
             };
         
-            // Generar el token utilizando la clave secreta de la variable de entorno
-            // Crear una clave de codificación
+            // Generate the token using the secret key from the environment variable
+            // Create an encryption key
             let secret_key = CONFIG.jwt.jwt_secret.clone();
             
             let encoding_key = EncodingKey::from_secret(secret_key.as_ref());

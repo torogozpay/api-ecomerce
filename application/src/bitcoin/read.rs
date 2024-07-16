@@ -17,5 +17,7 @@ pub async fn get_satoshi(mydata: CurrencyFilters) -> Result<i64, CustomError> {
     let curr = currencies::table.filter(currencies::currency.eq(mydata.currency.clone())).select(Currencies::as_select()).get_result(&mut conn)?;
     let amount = priceBitcoin::convert_currency_to_satoshi(curr, mydata.total_amount.to_f64().unwrap()).await?;
 
+    drop(conn);
+
     Ok(amount.into())
 }

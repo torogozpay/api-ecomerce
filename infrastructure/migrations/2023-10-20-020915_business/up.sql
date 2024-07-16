@@ -25,6 +25,7 @@ CREATE TABLE businesses (
  updated_at timestamp with time zone null,
  enabled boolean not null default true,
  apply_split boolean not null default true,
+ ln_address varchar(100) not null,
 );
 
 create unique index idx_cn_businesses on businesses (
@@ -41,3 +42,15 @@ CREATE TABLE currencies (
 
 INSERT INTO currencies(currency, yadio, binance)
 VALUES('USD','USD','BTCUSDT');
+
+
+CREATE TABLE users (
+ id serial primary key,
+ email varchar not null,
+ password varchar not null
+);
+
+CREATE TABLE configuration (
+ id serial primary key,
+ amount_min numeric(9,2) not null default 1
+);

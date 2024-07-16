@@ -6,12 +6,14 @@ port = "8282"
 [log]
 level = "info"
 
+[openapi]
+swagger = false
+
 [api]
-api_key = "0000-0000-0000-0000-0000"
-api_username = "MyUser"
-api_password = "MyPassword"
-api_server= "127.0.0.1"
+api_server= "https://"
+api_user= ""
+api_pass= ""
 
 [jwt]
-jwt_secret= "MySecretPassword123"
+jwt_secret= ""
 jwt_secs= 3600 

@@ -36,6 +36,8 @@ diesel::table! {
         updated_at -> Nullable<Timestamptz>,
         enabled -> Bool,
         apply_split -> Bool,
+        #[max_length = 100]
+        ln_address -> Varchar,
     }
 }
 
@@ -45,5 +47,20 @@ diesel::table! {
         currency -> Varchar,
         yadio -> Varchar,
         binance -> Varchar,
+    }
+}
+
+diesel::table! {    
+    users (id) {
+        id -> Int4,
+        email -> Varchar,
+        password -> Varchar,
+    }
+}
+
+diesel::table! {    
+    configuration (id) {
+        id -> Int4,
+        amount_min -> Numeric,
     }
 }

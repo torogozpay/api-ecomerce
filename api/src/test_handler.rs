@@ -1,14 +1,14 @@
-use application::{bitcoin, verificate_business};
-use actix_web::{web, get, HttpRequest, HttpResponse};
+use application::bitcoin;
+use actix_web::{web, post, get, HttpRequest, HttpResponse};
 
-use shared::error_handler::CustomError;
+use shared::{error_handler::CustomError, authorization::verificate_token};
 use domain::modelsext::CurrencyFilters;
 use crate::utils::response as resp;
 
 
 #[utoipa::path(
     get,
-    path = "/health_check",
+    path = "/api/ecommerce/v1/health_check",
     responses(
         (status = 200, description = "Testing"),
         (status = 400, description = "Error", body = inline(resp::ErrorResponse)),
@@ -23,16 +23,19 @@ pub async fn get_test_handler() -> Result<HttpResponse, CustomError> {
 }
 
 #[utoipa::path(
-    get,
-    path = "/getSatoshi",
+    post,
+    path = "/api/ecommerce/v1/getSatoshi",
     responses(
-        (status = 200, description = "Get info of bitcoin"),
+        (status = 200, description = "Get info of bitcoin price"),
         (status = 400, description = "Error", body = inline(resp::ErrorResponse)),
+    ),
+    security(
+        ("bearerAuth" = [])
     )
 )]
-#[get("/getSatoshi")]
+#[post("/getSatoshi")]
 pub async fn get_price_bitcoin_handler(mydata : web::Json<CurrencyFilters>, req: HttpRequest) -> Result<HttpResponse, CustomError> {
-    match verificate_business(req.headers()).await {
+    match verificate_token(req.headers()).await {
         Ok(_config) => {
 
             let sats = bitcoin::read::get_satoshi(mydata.into_inner())                

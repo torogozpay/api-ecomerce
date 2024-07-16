@@ -1,3 +1,4 @@
+// application/src/bitcoin/mod.rs
 #![allow(non_snake_case)]
 
 pub mod read;
@@ -31,9 +32,16 @@ async fn get_btc_fiat_cash_price(currency: Currencies) -> Result<f64, CustomErro
             info!("Yadio Response: {:?}", body);
             // Deserialize JSON into struct
         	let yadio: Result<YadioResponse, serde_json::Error> = serde_json::from_str(&body);
-        	info!("Yadio Deserialized: {:?}", yadio);
-        	Ok(yadio.unwrap().BTC)    
-    	}
+            match yadio {
+                Ok(yadio) => {
+                    info!("Yadio Deserialized: {:?}", yadio);
+                    Ok(yadio.BTC)    
+                }
+                Err(_) => Ok({
+                    get_binance_price(currency).await?
+                })
+            }
+        }
     	Err(_) => Ok({
             get_binance_price(currency).await?
     	})
@@ -60,10 +68,10 @@ async fn get_binance_price(currency: Currencies) -> Result<f64, CustomError> {
                     info!("Binance Deserialized: {:?}", binance);
                     Ok(binance.price.parse().expect("Not a number!"))    
                 }
-                Err(_) => Err(CustomError::new(999, "Error deserialized".to_string()))
+                Err(_) => Err(CustomError::new(997, "Error deserialized".to_string()))
             }
         }
-    	Err(_) => Err(CustomError::new(999, "Error converting".to_string()))
+    	Err(_) => Err(CustomError::new(990, "Error converting".to_string()))
 	}            
 }     
 
@@ -88,7 +96,7 @@ pub async fn convert_currency_to_satoshi(currency: Currencies, amount: f64) -> R
                     info!("{:.2} is equal to {:.8} (Satoshi)", amount, satoshi_amount);
                     Ok(satoshi_amount.into())
                 }
-                Err(_) => Err(CustomError::new(999, "Error converting".to_string()))
+                Err(_) => Err(CustomError::new(990, "Error converting".to_string()))
             }    
         
     	}
