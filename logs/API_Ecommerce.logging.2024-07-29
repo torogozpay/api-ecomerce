@@ -1,7 +1,0 @@
-[2m2024-07-29T14:30:32.933959Z[0m [32m INFO[0m [2mmain[0m[2m:[0m 🚀 API Ecommerce started successfully
-[2m2024-07-29T14:30:32.934017Z[0m [32m INFO[0m [2mactix_server::builder[0m[2m:[0m starting 2 workers
-[2m2024-07-29T14:30:32.934045Z[0m [32m INFO[0m [2mactix_server::server[0m[2m:[0m Actix runtime found; starting in Actix runtime
-[2m2024-07-29T21:04:19.526658Z[0m [32m INFO[0m [2mactix_server::server[0m[2m:[0m SIGINT received; starting forced shutdown
-[2m2024-07-29T21:04:19.528534Z[0m [32m INFO[0m [2mactix_server::accept[0m[2m:[0m accept thread stopped
-[2m2024-07-29T21:04:19.529353Z[0m [32m INFO[0m [2mactix_server::worker[0m[2m:[0m shutting down idle worker
-[2m2024-07-29T21:04:19.530453Z[0m [32m INFO[0m [2mactix_server::worker[0m[2m:[0m shutting down idle worker
