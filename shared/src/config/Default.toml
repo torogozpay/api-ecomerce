@@ -1,5 +1,5 @@
 [server]
-database_url = "postgres://user:pasword@localhost:5432/dbtest?sslmode=disable"
+database_url = "postgres://USER:PASSWORD@SERVER:PORT/ecommerceapi?sslmode=disable"
 host = "127.0.0.1"
 port = "8282"
 
@@ -15,5 +15,5 @@ api_user= ""
 api_pass= ""
 
 [jwt]
-jwt_secret= ""
+jwt_secret= "SECRET"
 jwt_secs= 3600 

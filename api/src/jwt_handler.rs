@@ -22,6 +22,7 @@ pub struct ErrorResponse {
     message: String,
 }
 
+/// Generate the token
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/generateAccessToken",
@@ -31,7 +32,6 @@ pub struct ErrorResponse {
         (status = 404, description = "Business was not found", body = inline(response::ErrorResponse))
     )
 )]
-// Endpoint to generate the token
 #[post("/generateAccessToken")]
 pub async fn generate_access_token_handler(data: web::Json<RequestData>) -> Result<HttpResponse, CustomError> {
 

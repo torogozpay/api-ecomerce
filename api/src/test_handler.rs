@@ -22,6 +22,7 @@ pub async fn get_test_handler() -> Result<HttpResponse, CustomError> {
     Ok(HttpResponse::Ok().json(info))        
 }
 
+/// Convert a total amount to Satoshis
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/getSatoshi",

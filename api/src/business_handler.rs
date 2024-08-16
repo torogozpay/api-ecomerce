@@ -11,6 +11,7 @@ use domain::modelsext::BusinessCreated;
 //use crate::utils::check;
 use crate::utils::response;
 
+/// Get all businesses
 #[utoipa::path(
     get,
     path = "/api/ecommerce/v1/getBusiness",
@@ -25,6 +26,7 @@ pub async fn list_businesses_handler() -> Result<HttpResponse, CustomError> {
     Ok(HttpResponse::Ok().json(businesses))
 }
 
+/// Get a business by id
 #[utoipa::path(
     get,
     path = "/api/ecommerce/v1/getBusiness/{model_id}",
@@ -39,7 +41,8 @@ pub async fn list_business_by_id_handler(model_id: web::Path<i32>) -> Result<Htt
     let business = read::list_business(*model_id)?;
     Ok(HttpResponse::Ok().json(business))
 }
- 
+
+/// Get a business by API data
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/getBusiness",
@@ -55,6 +58,7 @@ pub async fn list_business_by_api_handler(business: web::Json<BusinessCreated>) 
     Ok(HttpResponse::Ok().json(business))
 }
 
+/// Create a business
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/newBusiness",
@@ -69,6 +73,7 @@ pub async fn create_business_handler(business: web::Json<NewBusiness>) -> Result
     Ok(HttpResponse::Ok().json(business))
 }
 
+/// Update a business
 #[utoipa::path(
     put,
     path = "/api/ecommerce/v1/updBusiness",
@@ -84,6 +89,7 @@ pub async fn update_business_handler(business: web::Json<Business>) -> Result<Ht
     Ok(HttpResponse::Ok().json(business))
 }
 
+/// Delete a business
 #[utoipa::path(
     delete,
     path = "/api/ecommerce/v1/delBusiness/{model_id}",
@@ -99,6 +105,7 @@ pub async fn delete_business_handler(model_id: web::Path<i32>) -> Result<HttpRes
     Ok(HttpResponse::Ok().json(businesses))
 }
 
+/// Generate API data
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/newBusinessApi",

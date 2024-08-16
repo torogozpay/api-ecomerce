@@ -9,7 +9,6 @@ use crate::business_handler as business;
 use crate::invoice_handler as invoice;
 use crate::jwt_handler as jwt;
 use crate::test_handler as test;
-use crate::utils::response;
 
 
 #[derive(OpenApi)]
@@ -29,10 +28,8 @@ use crate::utils::response;
         invoice::save_preorder_handler,
     ),
     components(schemas(NewUser,Business,NewBusiness,BusinessCreated,NewInvoice,NewInvoiceDet,
-                       RequestData,CurrencyFilters,InvoiceFilters,OrderFilters,
-                       response::BusinessesResponse,response::BusinessResponse,
-                       response::InvoicesResponse,response::InvoiceResponse,
-                       response::DeleteResponse,response::ErrorResponse))
+                       RequestData,CurrencyFilters,InvoiceFilters,OrderFilters
+                    ))
 )]
 pub struct ApiDoc;
 

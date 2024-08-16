@@ -11,11 +11,12 @@ use uuid::Uuid;
 use crate::utils::response as resp;
 use tracing::info;
 
+/// Get an order
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/getOrder",
     responses(
-        (status = 200, description = "Get a order identifies with uuid", body = modelsext::InvoiceResp),
+        (status = 200, description = "Get an order identifies with uuid", body = modelsext::InvoiceResp),
         (status = 400, description = "Error", body = inline(resp::ErrorResponse)),
         (status = 401, description = "Not authorizated", body = inline(resp::ErrorResponse))
     ),
@@ -47,11 +48,12 @@ pub async fn list_order_handler(myfilt: web::Json<OrderFilters>, req: HttpReques
     }    
 }
 
+/// Get an invoice
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/getInvoice",
     responses(
-        (status = 200, description = "Get a invoice identifies with payment_hash", body = modelsext::InvoiceResp),
+        (status = 200, description = "Get an invoice identifies with payment_hash", body = modelsext::InvoiceResp),
         (status = 400, description = "Error", body = inline(resp::ErrorResponse)),
         (status = 401, description = "Not authorizated", body = inline(resp::ErrorResponse))
     ),
@@ -70,6 +72,7 @@ pub async fn list_invoice_handler(myfilt: web::Json<InvoiceFilters>, req: HttpRe
     }    
 }
 
+/// Save an order
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/savePreorder",
