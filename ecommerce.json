@@ -83,8 +83,8 @@
             "tags":[
                "jwt"
             ],
-            "summary":"Generate the token",
-            "description":"Generate the token",
+            "summary":"Generate token",
+            "description":"Generate token",
             "operationId":"generate_access_token_handler",
             "requestBody":{
                "description":"",
@@ -190,8 +190,8 @@
             "tags":[
                "business"
             ],
-            "summary":"Get a business by API data",
-            "description":"Get a business by API data",
+            "summary":"Get a business identified by api data",
+            "description":"Get a business identified by api data",
             "operationId":"list_business_by_api_handler",
             "requestBody":{
                "description":"",
@@ -206,7 +206,7 @@
             },
             "responses":{
                "200":{
-                  "description":"Get a business identifies with api data",
+                  "description":"Get a business identifies by api data",
                   "content":{
                      "application/json":{
                         "schema":{
@@ -275,7 +275,7 @@
             ],
             "responses":{
                "200":{
-                  "description":"Get a business identifies with id",
+                  "description":"Get a business identified by id",
                   "content":{
                      "application/json":{
                         "schema":{
@@ -344,7 +344,7 @@
             },
             "responses":{
                "200":{
-                  "description":"Get an invoice identifies with payment_hash",
+                  "description":"Get an invoice identified by payment_hash",
                   "content":{
                      "application/json":{
                         "schema":{
@@ -372,7 +372,7 @@
                   }
                },
                "401":{
-                  "description":"Not authorizated",
+                  "description":"Not authorized",
                   "content":{
                      "application/json":{
                         "schema":{
@@ -420,7 +420,7 @@
             },
             "responses":{
                "200":{
-                  "description":"Get an order identifies with uuid",
+                  "description":"Get an order identified by uuid",
                   "content":{
                      "application/json":{
                         "schema":{
@@ -448,7 +448,7 @@
                   }
                },
                "401":{
-                  "description":"Not authorizated",
+                  "description":"Not authorized",
                   "content":{
                      "application/json":{
                         "schema":{
@@ -480,8 +480,8 @@
             "tags":[
                "test"
             ],
-            "summary":"Convert a total amount to Satoshis",
-            "description":"Convert a total amount to Satoshis",
+            "summary":"Exchange total amount from USD to Satoshis",
+            "description":"Exchange total amount from USD to Satoshis",
             "operationId":"get_price_bitcoin_handler",
             "requestBody":{
                "description":"",
@@ -496,7 +496,7 @@
             },
             "responses":{
                "200":{
-                  "description":"Get info of bitcoin price"
+                  "description":"Get Bitcoin exchange rate info"
                },
                "400":{
                   "description":"Error",
@@ -531,8 +531,8 @@
             "tags":[
                "business"
             ],
-            "summary":"Create a business",
-            "description":"Create a business",
+            "summary":"Create new business",
+            "description":"Create new business",
             "operationId":"create_business_handler",
             "requestBody":{
                "description":"",
@@ -547,7 +547,7 @@
             },
             "responses":{
                "200":{
-                  "description":"Create a new business",
+                  "description":"Create new business",
                   "content":{
                      "application/json":{
                         "schema":{
@@ -626,7 +626,7 @@
                   }
                },
                "401":{
-                  "description":"Not authorizated",
+                  "description":"Not authorized",
                   "content":{
                      "application/json":{
                         "schema":{
@@ -651,8 +651,8 @@
             "tags":[
                "invoice"
             ],
-            "summary":"Save an order",
-            "description":"Save an order",
+            "summary":"Save pre order",
+            "description":"Save pre order",
             "operationId":"save_preorder_handler",
             "requestBody":{
                "description":"",
@@ -667,7 +667,7 @@
             },
             "responses":{
                "200":{
-                  "description":"Create a new pre order",
+                  "description":"Create new pre order",
                   "content":{
                      "application/json":{
                         "schema":{
@@ -695,7 +695,7 @@
                   }
                },
                "401":{
-                  "description":"Not authorizated",
+                  "description":"Not authorized",
                   "content":{
                      "application/json":{
                         "schema":{
@@ -743,7 +743,7 @@
             },
             "responses":{
                "200":{
-                  "description":"Modify a new business",
+                  "description":"Modify existing business",
                   "content":{
                      "application/json":{
                         "schema":{
@@ -796,7 +796,7 @@
       "schemas":{
          "Business":{
             "type":"object",
-            "description":"Define a structure to represent data of the businesses",
+            "description":"Define a structure to represent businesses data",
             "required":[
                "id",
                "app_name",
@@ -824,121 +824,121 @@
             "properties":{
                "api_id":{
                   "type":"string",
-                  "description":"Represents the identifier of the API"
+                  "description":"Represents the API identifier"
                },
                "api_secret":{
                   "type":"string",
-                  "description":"Represents the secret of the API"
+                  "description":"Represents the API secret"
                },
                "app_logo":{
                   "type":"string",
-                  "description":"Represents the route of the application logo"
+                  "description":"Represents the location of the application‘s logo"
                },
                "app_name":{
                   "type":"string",
-                  "description":"Represents the name of the application (Business)"
+                  "description":"Represents Business name"
                },
                "app_url":{
                   "type":"string",
-                  "description":"Represents the URL of the application"
+                  "description":"Represents application‘s URL"
                },
                "apply_split":{
                   "type":"boolean",
-                  "description":"Represents whether split payment applies"
+                  "description":"Represents split payment if applicable"
                },
                "ask_address":{
                   "type":"boolean",
-                  "description":"Indicates whether ask address"
+                  "description":"Indicates whether address is required"
                },
                "ask_email":{
                   "type":"boolean",
-                  "description":"Indicates whether ask email"
+                  "description":"Indicates whether email is required"
                },
                "ask_mobile":{
                   "type":"boolean",
-                  "description":"Indicates whether ask mobile"
+                  "description":"Indicates whether mobile phone number is required"
                },
                "ask_name":{
                   "type":"boolean",
-                  "description":"Indicates whether ask name"
+                  "description":"Indicates whether name is required"
                },
                "created_at":{
                   "type":"string",
                   "format":"date",
-                  "description":"Represents the date of creation"
+                  "description":"Issued date"
                },
                "enabled":{
                   "type":"boolean",
-                  "description":"Represents whether is an enabled business"
+                  "description":"Represents an enabled business"
                },
                "id":{
                   "type":"integer",
                   "format":"int32",
-                  "description":"Represents the identifier of the business"
+                  "description":"Represents a business identifier"
                },
                "link_amount":{
                   "type":"boolean",
-                  "description":"Represents the amount of the link"
+                  "description":"Represents link‘s amount"
                },
                "link_count":{
                   "type":"boolean",
-                  "description":"Represents the count of the link"
+                  "description":"Represents link‘s count"
                },
                "link_timeout":{
                   "type":"integer",
                   "format":"int32",
-                  "description":"Represents the timeout of the link"
+                  "description":"Represents the link timeout"
                },
                "link_url_pay":{
                   "type":"string",
-                  "description":"Represents the URL of the payment link",
+                  "description":"Represents the payment‘s URL",
                   "nullable":true
                },
                "ln_address":{
                   "type":"string",
-                  "description":"Represents the address LNURL"
+                  "description":"Represents the LNURL address"
                },
                "notify_customer":{
                   "type":"boolean",
-                  "description":"Indicates whether the customer must be notified"
+                  "description":"Indicates Customer notification"
                },
                "notify_email":{
                   "type":"boolean",
-                  "description":"Indicates whether the customer must be notified by email"
+                  "description":"Indicates Customer notification email"
                },
                "notify_webhook":{
                   "type":"boolean",
-                  "description":"Represents the webhook to notify"
+                  "description":"Represents notification webhook"
                },
                "set_emails":{
                   "type":"string",
-                  "description":"Represents the emails to notify",
+                  "description":"Represents email addresses to notify",
                   "nullable":true
                },
                "updated_at":{
                   "type":"string",
                   "format":"date",
-                  "description":"Represents the update date"
+                  "description":"Represents date of update"
                },
                "url_redirect":{
                   "type":"string",
-                  "description":"Represents the URL to redirect",
+                  "description":"Represents redirect URL",
                   "nullable":true
                },
                "url_webhook":{
                   "type":"string",
-                  "description":"Represents the URL of the webhook",
+                  "description":"Represents Webhook URL",
                   "nullable":true
                },
                "workspace_id":{
                   "type":"string",
-                  "description":"Represents the identifier of the workspace"
+                  "description":"Represents workspace identifier"
                }
             }
          },
          "BusinessCreated":{
             "type":"object",
-            "description":"Define a structure to show data of the API",
+            "description":"Define a data structure to show API‘s information",
             "required":[
                "api_id",
                "api_secret"
@@ -946,17 +946,17 @@
             "properties":{
                "api_id":{
                   "type":"string",
-                  "description":"Represents the identifier of the API"
+                  "description":"Represents the API identifier"
                },
                "api_secret":{
                   "type":"string",
-                  "description":"Represents the secret of the API"
+                  "description":"Represents the API secret"
                }
             }
          },
          "CurrencyFilters":{
             "type":"object",
-            "description":"Define a structure to save currency and total amount of the transaction",
+            "description":"Define data structure to save currency and total amount",
             "required":[
                "currency",
                "total_amount"
@@ -981,13 +981,13 @@
             "properties":{
                "hash":{
                   "type":"string",
-                  "description":"Represents the hash of the invoice"
+                  "description":"Represents Invoice hash"
                }
             }
          },
          "NewBusiness":{
             "type":"object",
-            "description":"Define a structure to represent data of the businesses",
+            "description":"Define a structure to represent businesses data",
             "required":[
                "app_name",
                "app_logo",
@@ -1014,110 +1014,110 @@
             "properties":{
                "api_id":{
                   "type":"string",
-                  "description":"Represents the identifier of the API"
+                  "description":"Represents the API identifier"
                },
                "api_secret":{
                   "type":"string",
-                  "description":"Represents the secret of the API"
+                  "description":"Represents the API secret"
                },
                "app_logo":{
                   "type":"string",
-                  "description":"Represents the route of the application logo"
+                  "description":"Represents the location of the application‘s logo"
                },
                "app_name":{
                   "type":"string",
-                  "description":"Represents the name of the application (Business)"
+                  "description":"Represents Business name"
                },
                "app_url":{
                   "type":"string",
-                  "description":"Represents the URL of the application"
+                  "description":"Represents application‘s URL"
                },
                "apply_split":{
                   "type":"boolean",
-                  "description":"Represents whether split payment applies"
+                  "description":"Represents split payment if applicable"
                },
                "ask_address":{
                   "type":"boolean",
-                  "description":"Indicates whether ask address"
+                  "description":"Indicates whether address is required"
                },
                "ask_email":{
                   "type":"boolean",
-                  "description":"Indicates whether ask email"
+                  "description":"Indicates whether email is required"
                },
                "ask_mobile":{
                   "type":"boolean",
-                  "description":"Indicates whether ask mobile"
+                  "description":"Indicates whether mobile phone number is required"
                },
                "ask_name":{
                   "type":"boolean",
-                  "description":"Indicates whether ask name"
+                  "description":"Indicates whether name is required"
                },
                "created_at":{
                   "type":"string",
                   "format":"date",
-                  "description":"Represents the date of creation"
+                  "description":"Issued date"
                },
                "enabled":{
                   "type":"boolean",
-                  "description":"Represents whether is an enabled business"
+                  "description":"Represents an enabled business"
                },
                "link_amount":{
                   "type":"boolean",
-                  "description":"Represents the amount of the link"
+                  "description":"Represents link‘s amount"
                },
                "link_count":{
                   "type":"boolean",
-                  "description":"Represents the count of the link"
+                  "description":"Represents link‘s count"
                },
                "link_timeout":{
                   "type":"integer",
                   "format":"int32",
-                  "description":"Represents the timeout of the link"
+                  "description":"Represents the link timeout"
                },
                "link_url_pay":{
                   "type":"string",
-                  "description":"Represents the URL of the payment link",
+                  "description":"Represents the payment‘s URL",
                   "nullable":true
                },
                "ln_address":{
                   "type":"string",
-                  "description":"Represents the address LNURL"
+                  "description":"Represents the LNURL address"
                },
                "notify_customer":{
                   "type":"boolean",
-                  "description":"Indicates whether the customer must be notified"
+                  "description":"Indicates Customer notification"
                },
                "notify_email":{
                   "type":"boolean",
-                  "description":"Indicates whether the customer must be notified by email"
+                  "description":"Indicates Customer notification email"
                },
                "notify_webhook":{
                   "type":"boolean",
-                  "description":"Represents the webhook to notify"
+                  "description":"Represents notification webhook"
                },
                "set_emails":{
                   "type":"string",
-                  "description":"Represents the emails to notify",
+                  "description":"Represents email addresses to notify",
                   "nullable":true
                },
                "updated_at":{
                   "type":"string",
                   "format":"date",
-                  "description":"Represents the update date"
+                  "description":"Represents date of update"
                },
                "url_redirect":{
                   "type":"string",
-                  "description":"Represents the URL to redirect",
+                  "description":"Represents redirect URL",
                   "nullable":true
                },
                "url_webhook":{
                   "type":"string",
-                  "description":"Represents the URL of the webhook",
+                  "description":"Represents Webhook URL",
                   "nullable":true
                },
                "workspace_id":{
                   "type":"string",
-                  "description":"Represents the identifier of the workspace"
+                  "description":"Represents workspace identifier"
                }
             }
          },
@@ -1142,72 +1142,72 @@
             "properties":{
                "applySplit":{
                   "type":"boolean",
-                  "description":"Represents whether split payment applies"
+                  "description":"Represents split payment if applicable"
                },
                "businessId":{
                   "type":"integer",
                   "format":"int32",
-                  "description":"Represents the identifier of the business"
+                  "description":"Represents the business identifier"
                },
                "currency":{
                   "type":"string",
-                  "description":"Represents the currency of the transaction"
+                  "description":"Represents the transaction currency"
                },
                "customerEmail":{
                   "type":"string",
-                  "description":"Represents the email of the email"
+                  "description":"Represents the email address"
                },
                "customerName":{
                   "type":"string",
-                  "description":"Represents the name of the customer"
+                  "description":"Represents the customer‘s name"
                },
                "details":{
                   "type":"array",
                   "items":{
                      "$ref":"#/components/schemas/NewInvoiceDet"
                   },
-                  "description":"Represents the details of products of the order"
+                  "description":"Represents the order detail"
                },
                "invoiceDate":{
                   "type":"string",
                   "format":"date",
-                  "description":"Represents the date of the order"
+                  "description":"Represents the order‘s date"
                },
                "invoiceStamp":{
                   "type":"string",
-                  "description":"Represents the datetime of the transaction"
+                  "description":"Represents the transaction TimeStamp"
                },
                "orderId":{
                   "type":"integer",
                   "format":"int32",
-                  "description":"Represents the identifier of the order"
+                  "description":"Represents the order‘s identifier"
                },
                "shipping":{
                   "type":"string",
-                  "description":"Represents the shipping of the order"
+                  "description":"Represents the order‘s shipping amount"
                },
                "subTotal":{
                   "type":"string",
-                  "description":"Represents the subtotal of the order"
+                  "description":"Represents the order‘s subtotal"
                },
                "taxes":{
                   "type":"string",
-                  "description":"Represents the taxes of the order"
+                  "description":"Represents the order‘s taxes"
                },
                "totalAmount":{
                   "type":"string",
-                  "description":"Represents the total amount of the order"
+                  "description":"Represents the order‘s total amount"
                },
                "totalSats":{
                   "type":"integer",
                   "format":"int64",
-                  "description":"Represents the total sats of the order"
+                  "description":"Represents the order‘s total sats"
                }
             }
          },
          "NewInvoiceDet":{
             "type":"object",
-            "description":"Define a structure to represent data of the products of the invoice",
+            "description":"Define a data structure to represent product‘s information included in the invoice",
             "required":[
                "productId",
                "productName",
@@ -1220,34 +1220,34 @@
             "properties":{
                "grandTotal":{
                   "type":"string",
-                  "description":"Represents the grand total of the product"
+                  "description":"Represents the product‘s total amount"
                },
                "productId":{
                   "type":"integer",
                   "format":"int32",
-                  "description":"Represents the identifier of the product"
+                  "description":"Represents the product identifier"
                },
                "productName":{
                   "type":"string",
-                  "description":"Represents the name of the product"
+                  "description":"Represents the product‘s name"
                },
                "quantity":{
                   "type":"integer",
                   "format":"int32",
-                  "description":"Represents the quantity of the product"
+                  "description":"Represents the product‘s quantity"
                },
                "subTotal":{
                   "type":"string",
-                  "description":"Represents the subtotal of the product"
+                  "description":"Represents the product‘s subtotal"
                },
                "taxes":{
                   "type":"string",
-                  "description":"Represents the taxes of the product"
+                  "description":"Represents the product‘s taxes"
                },
                "totalSats":{
                   "type":"integer",
                   "format":"int64",
-                  "description":"Represents the total sats of the product"
+                  "description":"Represents the product‘s total sats"
                }
             }
          },
@@ -1278,7 +1278,7 @@
             "properties":{
                "uuid":{
                   "type":"string",
-                  "description":"Represents the identifier of the order"
+                  "description":"Represents the order‘s identifier"
                }
             }
          },
@@ -1293,12 +1293,12 @@
                },
                "client_id":{
                   "type":"string",
-                  "description":"Represents the identifier of the API",
+                  "description":"Represents the API identifier",
                   "nullable":true
                },
                "client_secret":{
                   "type":"string",
-                  "description":"Represents the secret of the API",
+                  "description":"Represents the API secret",
                   "nullable":true
                },
                "grant_type":{

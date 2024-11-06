@@ -16,9 +16,9 @@ use tracing::info;
     post,
     path = "/api/ecommerce/v1/getOrder",
     responses(
-        (status = 200, description = "Get an order identifies with uuid", body = modelsext::InvoiceResp),
+        (status = 200, description = "Get an order identified by uuid", body = modelsext::InvoiceResp),
         (status = 400, description = "Error", body = inline(resp::ErrorResponse)),
-        (status = 401, description = "Not authorizated", body = inline(resp::ErrorResponse))
+        (status = 401, description = "Not authorized", body = inline(resp::ErrorResponse))
     ),
     security(
         ("bearerAuth" = [])
@@ -44,7 +44,7 @@ pub async fn list_order_handler(myfilt: web::Json<OrderFilters>, req: HttpReques
             Ok(HttpResponse::Ok().json(invoices))
 
         },
-        Err(_) => Err(CustomError::new(401, "Not authorizated".to_string()))
+        Err(_) => Err(CustomError::new(401, "Not authorized".to_string()))
     }    
 }
 
@@ -53,9 +53,9 @@ pub async fn list_order_handler(myfilt: web::Json<OrderFilters>, req: HttpReques
     post,
     path = "/api/ecommerce/v1/getInvoice",
     responses(
-        (status = 200, description = "Get an invoice identifies with payment_hash", body = modelsext::InvoiceResp),
+        (status = 200, description = "Get an invoice identified by payment_hash", body = modelsext::InvoiceResp),
         (status = 400, description = "Error", body = inline(resp::ErrorResponse)),
-        (status = 401, description = "Not authorizated", body = inline(resp::ErrorResponse))
+        (status = 401, description = "Not authorized", body = inline(resp::ErrorResponse))
     ),
     security(
         ("bearerAuth" = [])
@@ -68,18 +68,18 @@ pub async fn list_invoice_handler(myfilt: web::Json<InvoiceFilters>, req: HttpRe
             let invoices = invoice::read::list_invoice_by_hash(req.headers(), myfilt.hash.clone()).await?;
             Ok(HttpResponse::Ok().json(invoices))
         },
-        Err(_) => Err(CustomError::new(401, "Not authorizated".to_string()))
+        Err(_) => Err(CustomError::new(401, "Not authorized".to_string()))
     }    
 }
 
-/// Save an order
+/// Save pre order
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/savePreorder",
     responses(
-        (status = 200, description = "Create a new pre order", body = modelsext::InvoiceResp),
+        (status = 200, description = "Create new pre order", body = modelsext::InvoiceResp),
         (status = 400, description = "Error", body = inline(resp::ErrorResponse)),
-        (status = 401, description = "Not authorizated", body = inline(resp::ErrorResponse))
+        (status = 401, description = "Not authorized", body = inline(resp::ErrorResponse))
     ),
     security(
         ("bearerAuth" = [])
@@ -96,6 +96,6 @@ pub async fn save_preorder_handler(myinvoice: web::Json<NewInvoice>, req: HttpRe
             let businesses = invoice::create::save_pre_order(req.headers(), business_id, myinvoice.into_inner()).await?;
             Ok(HttpResponse::Ok().json(businesses))
         },
-        Err(_) => Err(CustomError::new(401, "Not authorizated".to_string()))
+        Err(_) => Err(CustomError::new(401, "Not authorized".to_string()))
     }    
 }

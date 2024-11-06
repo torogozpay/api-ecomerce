@@ -31,7 +31,7 @@ pub async fn list_businesses_handler() -> Result<HttpResponse, CustomError> {
     get,
     path = "/api/ecommerce/v1/getBusiness/{model_id}",
     responses(
-        (status = 200, description = "Get a business identifies with id", body = Business),
+        (status = 200, description = "Get a business identified by id", body = Business),
         (status = 400, description = "Error", body = inline(response::ErrorResponse)),
         (status = 404, description = "Business was not found", body = inline(response::ErrorResponse))
     )
@@ -42,12 +42,12 @@ pub async fn list_business_by_id_handler(model_id: web::Path<i32>) -> Result<Htt
     Ok(HttpResponse::Ok().json(business))
 }
 
-/// Get a business by API data
+/// Get a business identified by api data
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/getBusiness",
     responses(
-        (status = 200, description = "Get a business identifies with api data", body = Business),
+        (status = 200, description = "Get a business identifies by api data", body = Business),
         (status = 400, description = "Error", body = inline(response::ErrorResponse)),
         (status = 404, description = "Business was not found", body = inline(response::ErrorResponse))
     )
@@ -58,12 +58,12 @@ pub async fn list_business_by_api_handler(business: web::Json<BusinessCreated>) 
     Ok(HttpResponse::Ok().json(business))
 }
 
-/// Create a business
+/// Create new business
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/newBusiness",
     responses(
-        (status = 200, description = "Create a new business", body = response::BusinessResponse),
+        (status = 200, description = "Create new business", body = response::BusinessResponse),
         (status = 400, description = "Error", body = inline(response::ErrorResponse))
     )
 )]
@@ -78,7 +78,7 @@ pub async fn create_business_handler(business: web::Json<NewBusiness>) -> Result
     put,
     path = "/api/ecommerce/v1/updBusiness",
     responses(
-    (status = 200, description = "Modify a new business", body = response::BusinessResponse),
+    (status = 200, description = "Modify existing business", body = response::BusinessResponse),
     (status = 400, description = "Error", body = inline(response::ErrorResponse)),
     (status = 404, description = "Business was not found", body = inline(response::ErrorResponse))
     )
@@ -112,7 +112,7 @@ pub async fn delete_business_handler(model_id: web::Path<i32>) -> Result<HttpRes
     responses(
         (status = 200, description = "Generate data api", body = response::BusinessResponse),
         (status = 400, description = "Error", body = inline(response::ErrorResponse)),
-        (status = 401, description = "Not authorizated", body = inline(response::ErrorResponse))
+        (status = 401, description = "Not authorized", body = inline(response::ErrorResponse))
     )
 )]
 #[post("/newBusinessApi")]
@@ -122,6 +122,6 @@ pub async fn generate_data_api_handler(user: web::Json<NewUser>) -> Result<HttpR
             let data_api = create::generate_data_api()?;
             Ok(HttpResponse::Ok().json(data_api))
         },
-        Err(_) => Err(CustomError::new(401, "Not authorizated".to_string())),
+        Err(_) => Err(CustomError::new(401, "Not authorized".to_string())),
     }
 }

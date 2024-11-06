@@ -22,7 +22,7 @@ pub struct ErrorResponse {
     message: String,
 }
 
-/// Generate the token
+/// Generate token
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/generateAccessToken",
@@ -95,7 +95,7 @@ pub async fn generate_access_token_handler(data: web::Json<RequestData>) -> Resu
         
 
         },
-        Err(_) => Err(CustomError::new(401, "Not authorizated".to_string()))
+        Err(_) => Err(CustomError::new(401, "Not authorized".to_string()))
     } 
    
 }

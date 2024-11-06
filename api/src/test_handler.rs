@@ -22,12 +22,12 @@ pub async fn get_test_handler() -> Result<HttpResponse, CustomError> {
     Ok(HttpResponse::Ok().json(info))        
 }
 
-/// Convert a total amount to Satoshis
+/// Exchange total amount from USD to Satoshis
 #[utoipa::path(
     post,
     path = "/api/ecommerce/v1/getSatoshi",
     responses(
-        (status = 200, description = "Get info of bitcoin price"),
+        (status = 200, description = "Get Bitcoin exchange rate info"),
         (status = 400, description = "Error", body = inline(resp::ErrorResponse)),
     ),
     security(
@@ -45,7 +45,7 @@ pub async fn get_price_bitcoin_handler(mydata : web::Json<CurrencyFilters>, req:
 
             Ok(HttpResponse::Ok().json(sats))
         },
-        Err(_) => Err(CustomError::new(401, "Not authorizated".to_string())),
+        Err(_) => Err(CustomError::new(401, "Not authorized".to_string())),
     }
      
 }

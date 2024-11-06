@@ -22,9 +22,9 @@ pub struct Claims {
 pub struct RequestData {
   /// Represents the grant type
   pub grant_type: Option<String>,
-  /// Represents the identifier of the API
+  /// Represents the API identifier
   pub client_id: Option<String>,
-  /// Represents the secret of the API
+  /// Represents the API secret
   pub client_secret: Option<String>,
   /// Represents the audience
   pub audience: Option<String>,  
@@ -41,106 +41,106 @@ pub struct Token {
   pub jwt: String,
 }
 
- /// Define a structure to show data of the API
+ /// Define a data structure to show API‘s information 
  #[derive(Debug, Serialize, Deserialize, Default, utoipa::IntoParams, ToSchema)]
  pub struct BusinessCreated {
-  /// Represents the identifier of the API 
+  /// Represents the API identifier 
   pub api_id: String,
-  /// Represents the secret of the API
+  /// Represents the API secret
   pub api_secret: String
  }
 
  /// Define a structure to represent data of the invoice
  #[derive(Debug, Serialize, Deserialize, Default, ToSchema, Clone)]
  pub struct InvoiceData {
-  /// Represents the identifier of the business
+  /// Represents the business identifier
   pub business_id: i32,
-  /// Represents the identifier of the order
+  /// Represents the order‘s identifier
   pub order_id: i32,
-  /// Represents the identifier of the pre sale
+  /// Represents the pre sale identifier
   pub presell_id: Uuid,
-  /// Represents the name of the customer
+  /// Represents the customer‘s name
   pub customer_name: String,
-  /// Represents the email of the email
+  /// Represents the email address
   pub customer_email: String,
-  /// Represents the date of the invoice
+  /// Represents the invoice‘s date
   pub invoice_date: DateTime<Utc>,   
-  /// Represents the description of the order
+  /// Represents the order‘s description 
   pub description: String,
-  /// Represents the currency of the transaction
+  /// Represents the transaction currency 
   pub currency: String,
-  /// Represents the subtotal of the order 
+  /// Represents the order‘s subtotal 
   pub sub_total: BigDecimal,
-  /// Represents the taxes of the order
+  /// Represents the order‘s taxes
   pub taxes: BigDecimal,
-  /// Represents the shipping of the order
+  /// Represents the order‘s shipping amount
   pub shipping: BigDecimal,
-  /// Represents the total amount of the order
+  /// Represents the order‘s total amount
   pub total_amount: BigDecimal,
-  /// Represents the total sats of the order 
+  /// Represents the order‘s total sats  
   pub amount_sat: i64,
-  /// Represents whether split payment applies
+  /// Represents split payment if applicable
   pub apply_split: bool,
-  /// Represents the details of products of the order
+  /// Represents the order detail
   pub paymentSplit: Vec<PreorderSplit>   
  }
 
 #[derive(Debug, Serialize, Deserialize, ToSchema, Clone)]
 pub struct NewInvoice {
-    /// Represents the identifier of the business
+    /// Represents the business identifier
     pub businessId: i32,
-    /// Represents the identifier of the order
+    /// Represents the order‘s identifier
     pub orderId: i32,
-    /// Represents the name of the customer
+    /// Represents the customer‘s name 
     pub customerName: String,
-    /// Represents the email of the email
+    /// Represents the email address
     pub customerEmail: String,
-    /// Represents the currency of the transaction
+    /// Represents the transaction currency
     pub currency: String,
-    /// Represents the subtotal of the order 
+    /// Represents the order‘s subtotal  
     #[schema(value_type = String)]
     pub subTotal: BigDecimal,
-    /// Represents the taxes of the order
+    /// Represents the order‘s taxes
     #[schema(value_type = String)]
     pub taxes: BigDecimal,
-    /// Represents the shipping of the order
+    /// Represents the order‘s shipping amount
     #[schema(value_type = String)]
     pub shipping: BigDecimal,
-    /// Represents the total amount of the order
+    /// Represents the order‘s total amount 
     #[schema(value_type = String)]
     pub totalAmount: BigDecimal,
-    /// Represents the total sats of the order 
+    /// Represents the order‘s total sats  
     pub totalSats: i64,
-    /// Represents the date of the order
+    /// Represents the order‘s date 
     #[schema(value_type = String, format = Date)]
     pub invoiceDate: DateTime<Utc>,
-    /// Represents the datetime of the transaction
+    /// Represents the transaction TimeStamp
     pub invoiceStamp: String,
-    /// Represents whether split payment applies
+    /// Represents split payment if applicable
     pub applySplit: bool,
-    /// Represents the details of products of the order
+    /// Represents the order detail
     pub details: Vec<NewInvoiceDet>
  }
  
-/// Define a structure to represent data of the products of the invoice
+/// Define a data structure to represent product‘s information included in the invoice
 #[derive(Debug, Serialize, Deserialize, ToSchema, Clone)] 
 pub struct NewInvoiceDet {
-  /// Represents the identifier of the product
+  /// Represents the product identifier 
   pub productId: i32,
-  /// Represents the name of the product
+  /// Represents the product‘s name 
   pub productName: String,
-  /// Represents the quantity of the product
+  /// Represents the product‘s quantity 
   pub quantity: i32,
-  /// Represents the subtotal of the product
+  /// Represents the product‘s subtotal 
   #[schema(value_type = String)]
   pub subTotal: BigDecimal,
-  /// Represents the taxes of the product
+  /// Represents the product‘s taxes 
   #[schema(value_type = String)]
   pub taxes: BigDecimal,
-  /// Represents the grand total of the product
+  /// Represents the product‘s total amount
   #[schema(value_type = String)]
   pub grandTotal: BigDecimal,
-  /// Represents the total sats of the product
+  /// Represents the product‘s total sats
   pub totalSats: i64
 }
 
@@ -222,7 +222,7 @@ pub struct PreorderSplit {
 /// Define a structure to represent the filter of the order
 #[derive(Debug, Serialize, Deserialize, Default, ToSchema, Clone)]
 pub struct OrderFilters {
-  /// Represents the identifier of the order
+  /// Represents the order‘s identifier
   pub uuid: String
 }
 
@@ -310,11 +310,11 @@ pub struct LookupInvoiceResponse {
 /// Define a structure to filter the invoice by hash
 #[derive(Debug, Serialize, Deserialize, Default, ToSchema, Clone)]
 pub struct InvoiceFilters { 
-  /// Represents the hash of the invoice
+  /// Represents Invoice hash
   pub hash: String 
 }
 
-/// Define a structure to save currency and total amount of the transaction
+/// Define data structure to save currency and total amount
 #[derive(Debug, Serialize, Deserialize, Default, ToSchema, Clone)]
 pub struct CurrencyFilters {
   /// Represents the currency

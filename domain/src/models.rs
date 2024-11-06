@@ -13,129 +13,129 @@
  use bigdecimal::BigDecimal;
  use utoipa::ToSchema;
  
- /// Define a structure to represent data of the businesses
+ /// Define a structure to represent businesses data
  #[serde_as]
  #[derive(Debug, Serialize, Deserialize, Selectable, Insertable, AsChangeset, Clone, ToSchema)]
  #[diesel(table_name = businesses)]
  pub struct NewBusiness {
-     /// Represents the name of the application (Business)
+     /// Represents Business name
      pub app_name: String,
-     /// Represents the route of the application logo
+     /// Represents the location of the application‘s logo
      pub app_logo: String,
-     /// Represents the URL of the application
+     /// Represents application‘s URL
      pub app_url: String,
-     /// Represents the identifier of the API 
+     /// Represents the API identifier 
      pub api_id: String,
-     /// Represents the secret of the API
+     /// Represents the API secret
      pub api_secret: String,
-     /// Represents the identifier of the workspace 
+     /// Represents workspace identifier 
      #[schema(value_type = String)]
      #[serde(with = "my_uuid")]
      pub workspace_id: Uuid,
-     /// Indicates whether the customer must be notified
+     /// Indicates Customer notification
      pub notify_customer: bool,
-     /// Indicates whether the customer must be notified by email
+     /// Indicates Customer notification email
      pub notify_email: bool,
-     /// Represents the emails to notify
+     /// Represents email addresses to notify
      pub set_emails: Option<String>,
-     /// Represents the webhook to notify 
+     /// Represents notification webhook 
      pub notify_webhook: bool,
-     /// Represents the URL of the webhook 
+     /// Represents Webhook URL 
      pub url_webhook: Option<String>,
-     /// Represents the URL to redirect
+     /// Represents redirect URL
      pub url_redirect: Option<String>,
-     /// Represents the URL of the payment link 
+     /// Represents the payment‘s URL 
      pub link_url_pay: Option<String>,
-     /// Represents the timeout of the link
+     /// Represents the link timeout
      pub link_timeout: i32,
-     /// Represents the amount of the link
+     /// Represents link‘s amount
      pub link_amount: bool,
-     /// Represents the count of the link
+     /// Represents link‘s count
      pub link_count: bool,
-     /// Indicates whether ask name
+     /// Indicates whether name is required
      pub ask_name: bool,
-     /// Indicates whether ask mobile
+     /// Indicates whether mobile phone number is required
      pub ask_mobile: bool,
-     /// Indicates whether ask email
+     /// Indicates whether email is required
      pub ask_email: bool,
-     /// Indicates whether ask address
+     /// Indicates whether address is required
      pub ask_address: bool,
-     /// Represents the date of creation
+     /// Issued date
      #[schema(value_type = String, format = Date)]
      #[serde_as(as = "DisplayFromStr")]
      pub created_at: DateTime<Utc>,
-     /// Represents the update date
+     /// Represents date of update
      #[schema(value_type = String, format = Date)]
      pub updated_at: Option<DateTime<Utc>>,     
-     /// Represents whether is an enabled business
+     /// Represents an enabled business
      pub enabled: bool,
-     /// Represents whether split payment applies
+     /// Represents split payment if applicable
      pub apply_split: bool,
-     /// Represents the address LNURL
+     /// Represents the LNURL address
      pub ln_address: String,
  }
 
-/// Define a structure to represent data of the businesses
+/// Define a structure to represent businesses data
 #[serde_as]
  #[derive(Debug, Serialize, Deserialize, Queryable, Selectable, Insertable, AsChangeset, Ord, Eq, PartialOrd, PartialEq, Clone, ToSchema)] 
  #[diesel(table_name = businesses)]
  pub struct Business {
-     /// Represents the identifier of the business
+     /// Represents a business identifier
      pub id: i32,
-     /// Represents the name of the application (Business)
+     /// Represents Business name
      pub app_name: String,
-     /// Represents the route of the application logo
+     /// Represents the location of the application‘s logo
      pub app_logo: String,
-     /// Represents the URL of the application
+     /// Represents application‘s URL
      pub app_url: String,
-     /// Represents the identifier of the API 
+     /// Represents the API identifier 
      pub api_id: String,
-     /// Represents the secret of the API
+     /// Represents the API secret
      pub api_secret: String,
-     /// Represents the identifier of the workspace 
+     /// Represents workspace identifier 
      #[schema(value_type = String)]
      #[serde(with = "my_uuid")]
      pub workspace_id: Uuid,
-     /// Indicates whether the customer must be notified
+     /// Indicates Customer notification
      pub notify_customer: bool,
-     /// Indicates whether the customer must be notified by email
+     /// Indicates Customer notification email
      pub notify_email: bool,
-     /// Represents the emails to notify
+     /// Represents email addresses to notify
      pub set_emails: Option<String>,
-     /// Represents the webhook to notify 
+     /// Represents notification webhook 
      pub notify_webhook: bool,
-     /// Represents the URL of the webhook 
+     /// Represents Webhook URL 
      pub url_webhook: Option<String>,
-     /// Represents the URL to redirect
+     /// Represents redirect URL
      pub url_redirect: Option<String>,
-     /// Represents the URL of the payment link 
+     /// Represents the payment‘s URL 
      pub link_url_pay: Option<String>,
-     /// Represents the timeout of the link
+     /// Represents the link timeout
      pub link_timeout: i32,
-     /// Represents the amount of the link
+     /// Represents link‘s amount
      pub link_amount: bool,
-     /// Represents the count of the link
+     /// Represents link‘s count
      pub link_count: bool,
-     /// Indicates whether ask name
+     /// Indicates whether name is required
      pub ask_name: bool,
-     /// Indicates whether ask mobile
+     /// Indicates whether mobile phone number is required
      pub ask_mobile: bool,
-     /// Indicates whether ask email
+     /// Indicates whether email is required
      pub ask_email: bool,
-     /// Indicates whether ask address
+     /// Indicates whether address is required
      pub ask_address: bool,
-     /// Represents the date of creation
+     /// Issued date
      #[schema(value_type = String, format = Date)]
      #[serde_as(as = "DisplayFromStr")]
      pub created_at: DateTime<Utc>,
-     /// Represents the update date
+     /// Represents date of update
      #[schema(value_type = String, format = Date)]
      pub updated_at: Option<DateTime<Utc>>,     
-     /// Represents whether is an enabled business
+     /// Represents an enabled business
      pub enabled: bool,
-     /// Represents whether split payment applies
+     /// Represents split payment if applicable
      pub apply_split: bool,
-     /// Represents the address LNURL
+     /// Represents the LNURL address
      pub ln_address: String,
  }
 
